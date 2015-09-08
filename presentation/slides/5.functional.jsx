@@ -59,7 +59,7 @@ state = todoReducer(state, addTodo('Conquer the wrorld'));
 //     { text: 'Be awesome', done: true, id: 'Zs2c33' },
 //     { text: 'Conquer the wrorld', done: false, id: '89hrWi' }
 // ]
-state = todoReducer(state, editTodo(1, 'Conquer the world'));
+state = todoReducer(state, editTodo('89hrWi', 'Conquer the world'));
 // [
 //     { text: 'Be awesome', done: true, id: 'Zs2c33' },
 //     { text: 'Conquer the world', done: false, id: '89hrWi' }
@@ -280,7 +280,7 @@ Functional Flux abuses the concept of pure functions that reduce actions into th
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
 `Action creators are really easy now.
-We'll write our own miniature Functional Flux implementation, because it'll give us a greater understanding of how it works.`
+We'll write our own miniature Functional Flux implementation, because it'll give us a greater understanding of how things work.`
 	}>
 		<Heading size={ 1 }>Action Creators</Heading>
 		<CodePane
@@ -293,7 +293,7 @@ We'll write our own miniature Functional Flux implementation, because it'll give
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`Before we write the actual reducer, let's describe we want it to work.`
+`Before we write the actual reducer, let's describe how we want it to work.`
 	}>
 		<CodePane
 			lang='javascript'
@@ -408,7 +408,7 @@ Of course, there are optimizations to make and features to add, like middleware 
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`And since wouldn't be ReactDC without React, I'll show you an example.
+`And since it wouldn't be ReactDC without React, I'll show you an example.
 Some things should look pretty familiar.`
 	}>
 		<CodePane
@@ -416,11 +416,11 @@ Some things should look pretty familiar.`
 			source={ fluxetteExample }/>
 	</Slide>,
 
-    <Slide transition={ ['slide'] } bgColor='primary' notes={
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
 `In a nutshell, Functional Flux has three responsibilities:
 keeping a reference to your reducer,
 keeping a reference to your listeners,
-and calling your reducer and listeners when you dispatch.`
+and calling your reducer, updating the state, and notifying listeners when you dispatch.`
 	}>
 		<Text textSize='3em' bold textColor='tertiary'>Functional Flux in a nutshell</Text>
 		<Appear>
