@@ -4,6 +4,8 @@ import Intro from './slides/1.intro';
 import History from './slides/2.history';
 import Vanilla from './slides/3.vanilla';
 import Reconciliation from './slides/4.reconciliation';
+import Functional from './slides/5.functional';
+import Conclusion from './slides/6.conclusion';
 
 // import {
 // 	Appear, BlockQuote, Cite, CodePane, Deck, Fill,
@@ -16,7 +18,7 @@ import { Deck } from '../src/spectacle';
 
 export default class extends React.Component {
 	render() {
-		let slides = [Intro(), ...History(), ...Vanilla(), ...Reconciliation()];
+		let slides = [Intro(), ...History(), ...Vanilla(), ...Reconciliation(), ...Functional(), Conclusion()];
 		return (
 			<Deck transition={ ['zoom', 'slide'] } transitionDuration={ 800 } children={ slides }/>
 		);
