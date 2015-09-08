@@ -2,15 +2,20 @@ import React from 'react/addons';
 import { Heading, Slide, Text, Appear, Image, Code, CodePane } from '../../src/spectacle';
 
 let futureCode =
-`let a = 5;
-var a = 5; // but safer
-
-let { id } = thing;
-var id = thing.id;
-
+`// https://babeljs.io/
+// a safer var
+let a = 5;
+var a = 5;
+// coinciding object literals
+let obj = { x };
+var obj = { x: x };
+// coinciding object destructuring
+let { property } = thing;
+var property = thing.property;
+// concise function literals
 let add1 = x => x + 1;
 var add1 = function(x) { return x + 1; };
-
+// default arguments, argument destructuring
 let process = (a, b = a, { c }) => { doSomething(a, b, c); };
 var process = function(a, b, x) {
     if (b === undefined) {
@@ -19,19 +24,16 @@ var process = function(a, b, x) {
     var c = x.c;
     doSomething(a, b, c);
 };
-
-let obj = { x };
-var obj = { x: x };
-
+// functions in object literals
 let car = { drive() { console.log('vroom'); } };
 var car = { drive: function() { console.log('vroom'); } };
-
+// object spread
 x = { ...x, value: 3 };
 x = _.clone(x); x.value = 3;
-
+// array spread
 arr = [val, ...arr];
 arr = [val].concat(arr);
-
+// function binding
 let log = ::console.log;
 var log = console.log.bind(console);`;
 
@@ -117,8 +119,9 @@ let todoReducer = (state = initialTodos, action = {}) => {
                     : todo
             );
         case 'CLEAR_TODO':
-        default:
             return initialTodos;
+        default:
+            return state;
     }
 }`;
 
