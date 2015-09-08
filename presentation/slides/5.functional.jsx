@@ -36,7 +36,7 @@ let log = ::console.log;
 var log = console.log.bind(console);`;
 
 let actionCreatorCode =
-`let addTodo = text => ({ type: 'ADD_TODO', text: text.trim() }),
+`let addTodo = text => ({ type: 'ADD_TODO', text: text.trim(), id: uniqueID() }),
     deleteTodo = id => ({ type: 'DELETE_TODO', id }),
     toggleTodo = id => ({ type: 'TOGGLE_TODO', id }),
     editTodo = (id, newText) => ({ type: 'EDIT_TODO', id, text: newText.trim() }),
@@ -100,7 +100,7 @@ let todoReducer = (state = initialTodos, action = {}) => {
             return state.concat({
                 text: action.text,
                 done: false,
-                id: uniqueID()
+                id: action.id
             });
         case 'DELETE_TODO':
             return state.filter(todo => todo.id !== action.id);
@@ -133,7 +133,7 @@ let reducerFactoryCode =
 
 let newReducerCode =
 `let todoReducer = createReducer([], {
-    'ADD_TODO': (todos, { text }) => todos.concat({ text, done: false, id: uniqueID() }),
+    'ADD_TODO': (todos, { text, id }) => todos.concat({ text, done: false, id }) }),
     'DELETE_TODO': (todos, { id }) => todos.filter(todo => todo.id !== id),
     'TOGGLE_TODO': (todos, { id }) => todos.map(todo =>
         todo.id === id ? { ...todo, done: !todo.done } : todo),
