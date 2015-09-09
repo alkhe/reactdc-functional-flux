@@ -10,8 +10,8 @@ let [hotreload, devtools] = images;
 export default () => [
 	<Slide transition={ ['slide'] } bgColor='black' notes={
 `Early 2015, at React.js Conf, Pete Hunt simplified the idea of stores.
-He boiled them down to a 'reduce and a change event.'
-That means that stores are kind of like stateful functions, which notify all their subscribers when the state has changed.
+He boiled them down to 'a reduce and a change event.'
+That means that stores are really just a kind of stateful function that notifies all of its subscribers when the state has changed.
 This changed the way a lot of people thought, and spawned a new wave of techniques following the concept.`
 	}>
 		<Text textSize='3em' bold textColor='tertiary'>January 2015</Text>
@@ -24,11 +24,10 @@ This changed the way a lot of people thought, and spawned a new wave of techniqu
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='black' notes={
-`At ReactEurope, Dan Abramov introduced Redux to demonstrate React and Flux hot reloading.
+`Redux was among them. At ReactEurope, Dan Abramov introduced Redux to demonstrate React and Flux hot reloading.
 Dan realized that stores only needed to manage state, not store them.
 So he created functions that instead just take a state and operate on them.
-Dan called these stateless stores.
-We call them Reducers now.
+Dan called these stateless stores, which we now call Reducers.
 Redux leads the pack for a whole new family of Reactive and Functional Flux implementations.`
 	}>
 		<Text textSize='3em' bold textColor='tertiary'>June 2015</Text>

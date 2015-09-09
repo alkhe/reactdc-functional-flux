@@ -29,7 +29,8 @@ export default () => [
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='black' notes={
-`React simplifies the data-to-view problem, by representing it as a simple pure function of the application state.`
+`React simplifies the data-to-view problem, by representing it as a pure function of the application state.
+This means that if you pass the state into the view function twice, you'd get the same result.`
 	}>
 		<Code textColor='tertiary'>
 			UI = View(State)
@@ -57,7 +58,10 @@ Here's a table with React topic growth on Reddit -- it's essentially doubled eve
 But since React only works as the view layer, everyone is running into troubles dealing with data management.
 At the F8 2014 Developer Conference, Jing Chen introduces the Flux architecture as the data management solution to rule them all.`
 	}>
-		<Text textSize='3em' bold textColor='tertiary'>April 2014</Text>
+		<Text textSize='3em' bold textColor='tertiary'>What about the M?</Text>
+		<Appear>
+			<Text textSize='3em' bold textColor='tertiary'>April 2014</Text>
+		</Appear>
 		<Appear>
 			<Text textSize='3em' bold textColor='tertiary'>@jingc introduces Flux at F8 2014</Text>
 		</Appear>

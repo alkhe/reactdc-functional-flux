@@ -8,7 +8,7 @@ preload(images);
 let [flux, mvc, dispatchdispatch] = images;
 
 export default () => [
-	<Slide transition={ ['slide'] } bgColor='primary' notes={
+	<Slide transition={ ['zoom'] } bgColor='primary' notes={
 `By this time, React has become fairly ubiquitous.
 Flux is now the new craze.`
 	}>
@@ -18,7 +18,7 @@ Flux is now the new craze.`
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`This is how the diagram for an ordinary MVC application would look like.
+`This is what the diagram for an ordinary MVC application would look like.
 Flux aims to solve the confusing graphic relationships of traditional MVC by introducing a unidirectional data flow.`
 	}>
 		<Image src={ mvc } />
@@ -51,7 +51,7 @@ Instead of having your data manage your views, your views subscribe to changes i
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`Facebook doesn't give you a library, just a specification.
+`But Facebook doesn't give you a library, just a specification.
 This initiates a gigantic space race for everyone to jump on board and build the best Flux implementation out there.`
 	}>
 		<Heading size={ 1 }>
@@ -84,7 +84,7 @@ This initiates a gigantic space race for everyone to jump on board and build the
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
 `We found out that React.renderToString could be used to quickly render a copy of the DOM on the server and send it to the client for fast page loads.
 This is called isomorphic, or universal React.
-As we grew more experienced with Flux, we also found that it wasn't as good as we originally thought it was.`
+As we grew more experienced with Flux, we also found that it wasn't as good as we originally thought.`
 	}>
 		<Text textSize='3em' bold textColor='tertiary'>Then, we discovered Isomorphic React.</Text>
 		<Appear>
@@ -94,16 +94,17 @@ As we grew more experienced with Flux, we also found that it wasn't as good as w
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
 `Facebook's dispatcher was a singleton.
-This meant that you could only effectively run it on the client.
-Action Creators passed actions directly to the dispatcher.
-This led to redundant code, and made it even less isomorphic.
+That meant that you could only have one dispatcher per application.
+Isomorphic React requires that you create new instances of Flux per client, so you couldn't effectively run it on the server.
+Action Creators passed actions directly into the dispatcher.
+This was extremely redundant and drove the singleton architecture.
+It was also much harder to test.
 There was a lot of boilerplate and dependencies involved.
 They basically asked you waste time so you could save it in the future.
 As applications grew, stores started depending on each other.
-This was done in a perplexing and roundabout way that was just plain ugly and locked up people's applications.
-Nobody knew how to do async.
-This made it even harder.
-Even in Facebook's own Flux chat example, they were putting setTimeout hacks everywhere.`
+Dependencies were managed in a roundabout way that was confusing and locked up people's applications.
+Nobody knew how to do async, and this made it even harder.
+The agreed-on solution was to use setTimeout; even in Facebook's own Flux chat example, they put setTimeout hacks everywhere.`
 	}>
 		<Heading textColor='quaternary'>Weaknesses</Heading>
 		<Appear>

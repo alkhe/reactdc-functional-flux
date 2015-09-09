@@ -1,40 +1,61 @@
 import React from 'react/addons';
 import { Heading, Slide, Text, Appear, Image, Code, CodePane } from '../../src/spectacle';
 
-let futureCode =
-`// https://babeljs.io/
-// a safer var
-let a = 5;
-var a = 5;
-// coinciding object literals
-let obj = { x };
-var obj = { x: x };
-// coinciding object destructuring
-let { property } = thing;
-var property = thing.property;
-// concise function literals
-let add1 = x => x + 1;
-var add1 = function(x) { return x + 1; };
-// default arguments, argument destructuring
-let process = (a, b = a, { c }) => { doSomething(a, b, c); };
+let letCode = `let a = 5;
+
+var a = 5;`;
+
+let colCode = `let error = { message, code };
+
+var error = {
+    message: message,
+    code: code
+};`;
+
+let codCode = `let { value, type } = thing;
+
+var value = thing.value;
+var type = thing.type;`;
+
+let lamCode = `let add1 = x => x + 1;
+
+var add1 = function(x) {
+    return x + 1;
+};`;
+
+let argCode = `let process = (a, b = a, { c }) => {
+    doSomething(a, b, c);
+};
+
 var process = function(a, b, x) {
     if (b === undefined) {
         b = a;
     }
     var c = x.c;
     doSomething(a, b, c);
+};`;
+
+let obfCode = `let car = {
+    drive() {
+        console.log('vroom');
+    }
 };
-// functions in object literals
-let car = { drive() { console.log('vroom'); } };
-var car = { drive: function() { console.log('vroom'); } };
-// object spread
-x = { ...x, value: 3 };
-x = _.clone(x); x.value = 3;
-// array spread
+
+var car = {
+    drive: function() {
+        console.log('vroom');
+    }
+};`;
+
+let sprCode = `x = { ...x, value: 3 };
 arr = [val, ...arr];
-arr = [val].concat(arr);
-// function binding
-let log = ::console.log;
+
+x = _.clone(x);
+x.value = 3;
+arr = [val].concat(arr);`;
+
+let binCode = `let log = ::console.log;
+
 var log = console.log.bind(console);`;
 
 let actionCreatorCode =
@@ -127,8 +148,8 @@ let todoReducer = (state = initialTodos, action = {}) => {
 
 let reducerFactoryCode =
 `let createReducer = (initialState = {}, reducers = {}) =>
-    (state = initialState, action) => {
-        if (action !== undefined && action.type in reducers) {
+    (state = initialState, action = {}) => {
+        if (action.type in reducers) {
             state = reducers[action.type](state, action);
         }
         return state;
@@ -148,17 +169,16 @@ let newReducerCode =
 let shapeFactoryCode =
 `let createShape = (shape = {}) =>
     (state = {}, action) => {
-        for (let i in shape) {
-            let last = state[i],
-                next = shape[i](last, action);
-            if (last !== next) {
-                state = { ...state, [i]: next };
-            }
+        for (let domain in shape) {
+            state = {
+                ...state,
+                [domain]: shape[domain](state, action)
+            };
         }
         return state;
-    };
+    };`;
 
-let eShop = createShape({
+let shapeUsage = `let eShop = createShape({
 	cart: cartReducer,
 	products: productsReducer
 });
@@ -185,8 +205,8 @@ let fluxFactoryCode =
 
 let finalCode =
 `export let createReducer = (initialState = {}, reducers = {}) =>
-    (state = initialState, action) => {
-        if (action !== undefined && action.type in reducers) {
+    (state = initialState, action = {}) => {
+        if (action.type in reducers) {
             state = reducers[action.type](state, action);
         }
         return state;
@@ -194,12 +214,11 @@ let finalCode =
 
 export let createShape = (shape = {}) =>
     (state = {}, action) => {
-        for (let i in shape) {
-            let last = state[i],
-                next = shape[i](last, action);
-            if (last !== next) {
-                state = { ...state, [i]: next };
-            }
+        for (let domain in shape) {
+            state = {
+                ...state,
+                [domain]: shape[domain](state, action)
+            };
         }
         return state;
     };
@@ -232,7 +251,7 @@ let flux = Flux( // this is createFlux
     })
 );
 
-@connect(state => ({ text: state })) // this takes care of subscribing
+@connect(text => ({ text })) // this takes care of subscribing
 class Updater extends React.Component {
     change(e) {
         this.dispatch(updateAction(e.target.value));
@@ -255,29 +274,114 @@ React.render( // this makes flux accessible to @connect
 );`;
 
 export default () => [
-	<Slide transition={ ['slide'] } bgColor='primary' notes={
+	<Slide transition={ ['zoom'] } bgColor='primary' notes={
 `In Functional Flux, Action Creators are now just pure functions returning Action objects.
 Reducers take a state and an action, and return a new state.
-Functional Flux abuses the concept of pure functions that reduce actions into the state.`
+Functional Flux relies heavily on the concept of pure functions that reduce actions into the state.`
     }>
 		<Heading size={ 1 } fit textColor='secondary'>Functional Flux</Heading>
 		<Appear>
-			<Text textSize='3em' bold textColor='tertiary'>Action Creators are pure functions</Text>
+			<Text textSize='3em' bold textColor='tertiary'>Action Creators</Text>
+            <Code textSize='3em' textColor='tertiary'>(args) => Action</Code>
 		</Appear>
 		<Appear>
-			<Text textSize='3em' bold textColor='tertiary'>Reducers are pure functions</Text>
+			<Text textSize='3em' bold textColor='tertiary'>Reducers</Text>
+            <Code textSize='3em' textColor='tertiary'>(State, Action) => State</Code>
 		</Appear>
 		<Appear>
+            <Text textSize='3em' bold textColor='tertiary'>Flux</Text>
 			<Code textSize='3em' textColor='tertiary'>State = Reducer(State, Action)</Code>
 		</Appear>
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`Now comes the code. Many people use ES6 and ES7 features nowadays, so I'll go over some important ones, along with their approximate ES5 equivalents.`
+`Now comes the code.
+Many people use ES6 and ES7 features nowadays, so I'll go over some important ones, along with their approximate ES5 equivalents.
+You may have heard of Babel before.
+It's an amazing code transpiler that allows you to use future Javascript features and JSX syntax React.
+It's available for webpack, browserify, and Gulp.`
 	}>
-		<CodePane
+		<Heading size={ 1 }>ES6+</Heading>
+        <Text textSize='3em' bold textColor='tertiary'>https://babeljs.io/</Text>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`let`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>let: a safer var</Text>
+        <CodePane
 			lang='javascript'
-			source={ futureCode }
+			source={ letCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`constructing`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Coinciding properties</Text>
+        <CodePane
+			lang='javascript'
+			source={ colCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`destructuring`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Coinciding declarations</Text>
+        <CodePane
+			lang='javascript'
+			source={ codCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`lambdas`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Arrow functions</Text>
+        <CodePane
+			lang='javascript'
+			source={ lamCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`lambdas`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Default arguments and argument destructuring</Text>
+        <CodePane
+			lang='javascript'
+			source={ argCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`lambdas`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Method definitions</Text>
+        <CodePane
+			lang='javascript'
+			source={ obfCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`lambdas`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Object and Array spreads</Text>
+        <CodePane
+			lang='javascript'
+			source={ sprCode }
+			margin='20px auto'/>
+	</Slide>,
+
+	<Slide transition={ ['slide'] } bgColor='primary' notes={
+`lambdas`
+	}>
+		<Text textSize='3em' bold textColor='tertiary'>Function binding</Text>
+        <CodePane
+			lang='javascript'
+			source={ binCode }
 			margin='20px auto'/>
 	</Slide>,
 
@@ -375,6 +479,12 @@ We can take advantage of this by composing many different kinds of reducers, eac
 			<CodePane
 				lang='javascript'
 				source={ shapeFactoryCode }/>
+        </Appear>
+		<Appear>
+			<CodePane
+				lang='javascript'
+				source={ shapeUsage }
+                margin='20px auto'/>
 		</Appear>
 	</Slide>,
 
@@ -403,7 +513,7 @@ All we need now is to find a way to attach listeners and call them when the stat
 `This is our mini Functional Flux implementation.
 Thirty lines.
 No dependencies.
-Of course, there are optimizations to make and features to add, like middleware and React integration, but this, in essence, is a Functional Flux implementation.`
+Of course, there are features to add, like middleware and React integration, and edge cases to work out, but this, in essence, is a Functional Flux implementation.`
 	}>
 		<CodePane
 			lang='javascript'
@@ -411,7 +521,7 @@ Of course, there are optimizations to make and features to add, like middleware 
 	</Slide>,
 
 	<Slide transition={ ['slide'] } bgColor='primary' notes={
-`And since it wouldn't be ReactDC without React, I'll show you an example.
+`And since it wouldn't be React DC without any React, I'll show you an example.
 Some things should look pretty familiar.`
 	}>
 		<CodePane
@@ -423,7 +533,7 @@ Some things should look pretty familiar.`
 `In a nutshell, Functional Flux has three responsibilities:
 keeping a reference to your reducer,
 keeping a reference to your listeners,
-and calling your reducer, updating the state, and notifying listeners when you dispatch.`
+and updating the state, and notifying listeners when you dispatch.`
 	}>
 		<Text textSize='3em' bold textColor='tertiary'>Functional Flux in a nutshell</Text>
 		<Appear>
